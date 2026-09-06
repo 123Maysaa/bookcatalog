@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: book-catalog
-          image: docker.io/your-dockerhub-username/book-catalog:1.0.0
+          image: docker.io/mayasii/book-catalog:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
