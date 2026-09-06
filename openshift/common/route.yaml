@@ -1,0 +1,15 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: book-catalog
+  labels:
+    app.kubernetes.io/name: book-catalog
+spec:
+  to:
+    kind: Service
+    name: book-catalog
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

@@ -1,0 +1,43 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: book-catalog-dc
+  labels:
+    app.kubernetes.io/name: book-catalog
+spec:
+  replicas: 2
+  selector:
+    app.kubernetes.io/name: book-catalog-dc
+  strategy:
+    type: Rolling
+  triggers:
+    - type: ConfigChange
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: book-catalog-dc
+    spec:
+      containers:
+        - name: book-catalog
+          image: docker.io/your-dockerhub-username/book-catalog:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: book-catalog-config
+            - secretRef:
+                name: book-catalog-secret
+          env:
+            - name: PORT
+              value: "8080"
+          readinessProbe:
+            httpGet: { path: /healthz, port: http }
+            initialDelaySeconds: 3
+          livenessProbe:
+            httpGet: { path: /healthz, port: http }
+            initialDelaySeconds: 10
+          resources:
+            requests: { cpu: 50m, memory: 64Mi }
+            limits: { cpu: 250m, memory: 128Mi }

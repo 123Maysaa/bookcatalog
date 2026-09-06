@@ -1,0 +1,9 @@
+resources:
+  - common/configmap.yaml
+  - common/secret.yaml
+  - database/service.yaml
+  - database/statefulset.yaml
+  - deployment/service.yaml
+  - common/route.yaml
+  # Default memakai Deployment modern. Jangan menambah deploymentconfig di sini.
+  - deployment/deployment.yaml

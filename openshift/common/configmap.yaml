@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: book-catalog-config
+  labels:
+    app.kubernetes.io/name: book-catalog
+data:
+  APP_NAME: "Katalog Buku Nusantara"
+  GREETING: "Temukan rekomendasi buku untuk perjalanan belajarmu."
+  THEME: "forest"
+  FEATURED_CATEGORY: "Teknologi"
+  DATABASE_HOST: "book-catalog-db"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "catalog_db"

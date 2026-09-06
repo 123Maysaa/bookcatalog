@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: book-catalog-db
+  labels:
+    app.kubernetes.io/name: book-catalog-db
+spec:
+  serviceName: book-catalog-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: book-catalog-db
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: book-catalog-db
+    spec:
+      containers:
+        - name: postgresql
+          image: docker.io/sclorg/postgresql-16-c9s:latest
+          ports:
+            - name: postgresql
+              containerPort: 5432
+          env:
+            - name: POSTGRESQL_USER
+              valueFrom:
+                secretKeyRef: { name: book-catalog-secret, key: DATABASE_USERNAME }
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: book-catalog-secret, key: DATABASE_PASSWORD }
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                configMapKeyRef: { name: book-catalog-config, key: DATABASE_NAME }
+          volumeMounts:
+            - name: database-data
+              mountPath: /var/lib/pgsql/data
+          readinessProbe:
+            tcpSocket: { port: postgresql }
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: postgresql }
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+  volumeClaimTemplates:
+    - metadata:
+        name: database-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

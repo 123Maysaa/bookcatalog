@@ -1,0 +1,15 @@
+{
+  "name": "book-catalog-ocp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node.js PostgreSQL demo app for OpenShift",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
