@@ -1,9 +1,12 @@
-FROM docker.io/library/node:20-alpine
+FROM node:alpine
 
 WORKDIR /usr/src/app
-COPY --chown=node:node package.json server.js ./
-USER node
-RUN npm install --omit=dev
+
+COPY package.json ./
+RUN npm install
 
 EXPOSE 8080
-CMD ["node", "server.js"]
+
+COPY . .
+
+CMD ["sh", "-c", "node server.js"]
